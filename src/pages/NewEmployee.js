@@ -12,6 +12,7 @@ export const NewEmployee = () => {
   //const navigate = useNavigate();
   const dispatch = useDispatch();
   const [employee, setEmployee] = useState({
+    id: 0,
     firstname: "",
     lastname: "",
     birthdate: "",
@@ -19,7 +20,7 @@ export const NewEmployee = () => {
     street: "",
     city: "",
     state: "",
-    zipcode: 0,
+    zipcode: "",
     department: "",
   });
 

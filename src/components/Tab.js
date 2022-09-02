@@ -26,7 +26,7 @@ const TabLink = styled(StyledLink)`
   display: flex;
   align-items: center;
   &:hover > i,
-  &:hover > p {
+  &:hover > span {
     color: #ee6338;
   }
 `;

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  arr: [],
+  arr: JSON.parse(localStorage.getItem("employee")) || [],
   loadStatus: "",
   loadError: "",
   employeeLoaded: false,
@@ -9,14 +9,23 @@ const initialState = {
 
 export const loadEmployee = createAsyncThunk(
   "employee/loadEmployee",
-  async (obj, { rejectWithValue, fulfillWithValue }) => {
+  async (obj, { rejectWithValue, fulfillWithValue, getState }) => {
     try {
+      // const currentState = getState();
+      // console.log(currentState, JSON.parse(localStorage.getItem("employee")));
+      // if (localStorage.getItem("employee")) {
+      //   currentState.employee.arr.push(
+      //     JSON.parse(localStorage.getItem("employee"))
+      //   );
+      // } else {
       const response = await fetch("./data/employees.json");
       if (!response.ok) {
         return rejectWithValue(response.status);
       }
       const data = await response.json();
+      localStorage.setItem("employee", JSON.stringify(data));
       return fulfillWithValue(data);
+      // }
     } catch (err) {
       return rejectWithValue(err.message);
     }
@@ -28,10 +37,8 @@ export const employeeSlice = createSlice({
   initialState,
   reducers: {
     createNewEmployee(state, action) {
-      return {
-        ...state,
-        arr: [...state.arr, action.payload],
-      };
+      state.arr.push(action.payload);
+      localStorage.setItem("employee", JSON.stringify(state.arr));
     },
   },
   extraReducers: (builder) => {
@@ -41,8 +48,7 @@ export const employeeSlice = createSlice({
     builder.addCase(loadEmployee.fulfilled, (state, action) => {
       if (action.payload) {
         return {
-          ...state,
-          arr: [action.payload],
+          arr: Object.assign([...state.arr], action.payload),
           loadStatus: "Fulfilled",
           employeeLoaded: true,
         };
@@ -52,7 +58,6 @@ export const employeeSlice = createSlice({
       console.log(action);
       return {
         ...state,
-        arr: [...state.arr, action],
         loadStatus: "rejected",
         loadError: action.error.message,
       };
