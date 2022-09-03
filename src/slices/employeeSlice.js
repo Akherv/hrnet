@@ -9,15 +9,8 @@ const initialState = {
 
 export const loadEmployee = createAsyncThunk(
   "employee/loadEmployee",
-  async (obj, { rejectWithValue, fulfillWithValue, getState }) => {
+  async (obj, { rejectWithValue, fulfillWithValue }) => {
     try {
-      // const currentState = getState();
-      // console.log(currentState, JSON.parse(localStorage.getItem("employee")));
-      // if (localStorage.getItem("employee")) {
-      //   currentState.employee.arr.push(
-      //     JSON.parse(localStorage.getItem("employee"))
-      //   );
-      // } else {
       const response = await fetch("./data/employees.json");
       if (!response.ok) {
         return rejectWithValue(response.status);
@@ -25,7 +18,6 @@ export const loadEmployee = createAsyncThunk(
       const data = await response.json();
       localStorage.setItem("employee", JSON.stringify(data));
       return fulfillWithValue(data);
-      // }
     } catch (err) {
       return rejectWithValue(err.message);
     }

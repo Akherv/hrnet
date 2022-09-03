@@ -8,7 +8,9 @@ export const AllEmployee = () => {
   const [entries, setEntries] = useState(10);
   const [employeesArr, setEmployeesArr] = useState(employees);
   const [pagination, setPagination] = useState();
-  const [currentPages, setCurrentPages] = useState(1);
+  const [currentPage, setcurrentPage] = useState(1);
+  const [employeesSorted, setEmployeesSorted] = useState([]);
+  const [employeesFiltered, setEmployeesFiltered] = useState([]);
 
   const stringSort = (val_a, val_b, type) => {
     let a = val_a.toLowerCase();
@@ -61,64 +63,64 @@ export const AllEmployee = () => {
   const handleSortColumn = (column, type) => {
     switch (column) {
       case "firstname":
-        setEmployeesArr(
+        setEmployeesSorted(
           [...employees].sort((a, b) =>
             stringSort(a.firstname, b.firstname, type)
           )
         );
         break;
       case "lastname":
-        setEmployeesArr(
+        setEmployeesSorted(
           [...employees].sort((a, b) =>
             stringSort(a.lastname, b.lastname, type)
           )
         );
         break;
       case "startdate":
-        setEmployeesArr(
+        setEmployeesSorted(
           [...employees].sort((a, b) =>
             dateSort(a.startdate, b.startdate, type)
           )
         );
         break;
       case "department":
-        setEmployeesArr(
+        setEmployeesSorted(
           [...employees].sort((a, b) =>
             stringSort(a.department, b.department, type)
           )
         );
         break;
       case "birthdate":
-        setEmployeesArr(
+        setEmployeesSorted(
           [...employees].sort((a, b) =>
             dateSort(a.birthdate, b.birthdate, type)
           )
         );
         break;
       case "street":
-        setEmployeesArr(
+        setEmployeesSorted(
           [...employees].sort((a, b) => stringSort(a.street, b.street, type))
         );
         break;
       case "city":
-        setEmployeesArr(
+        setEmployeesSorted(
           [...employees].sort((a, b) => stringSort(a.city, b.city, type))
         );
         break;
       case "state":
-        setEmployeesArr(
+        setEmployeesSorted(
           [...employees].sort((a, b) => stringSort(a.state, b.state, type))
         );
         break;
       case "zipcode":
-        setEmployeesArr(
+        setEmployeesSorted(
           [...employees].sort((a, b) =>
             type === "asc" ? b.zipcode - a.zipcode : a.zipcode - b.zipcode
           )
         );
         break;
       default:
-        setEmployeesArr(
+        setEmployeesSorted(
           [...employees].sort((a, b) =>
             stringSort(a.lastname, b.lastname, type)
           )
@@ -128,30 +130,31 @@ export const AllEmployee = () => {
   };
 
   const handleFilterEntries = (e) => {
-    setEmployeesArr(
-      [...employees].filter((employee, idx) => {
-        console.log(employee, idx);
-        return idx <= e.target.value;
-      })
-    );
+    // setEmployeesSorted(
+    //   [...employeesSorted].filter((employee, idx) => {
+    //     return idx <= e.target.value;
+    //   })
+    // );
     setEntries(e.target.value);
+    setcurrentPage(1);
   };
 
   const handleFilterPages = (el, pagesIdx) => {
-    // console.log(
-    //   entries * (pagesIdx + 1) - entries + 1,
-    //   entries * (pagesIdx + 1),
-    //   el
-    // );
-    setEmployeesArr(
-      [...employees].filter((employee, idx) => {
+    setEmployeesFiltered(
+      [...employeesSorted].filter((employee, idx) => {
+        console.log(
+          entries,
+          pagesIdx + 1,
+          entries * (pagesIdx + 1) - entries,
+          entries * (pagesIdx + 1)
+        );
         return (
           idx >= entries * (pagesIdx + 1) - entries &&
           idx < entries * (pagesIdx + 1)
         );
       })
     );
-    setCurrentPages(pagesIdx + 1);
+    setcurrentPage(pagesIdx + 1);
   };
 
   useEffect(() => {
@@ -164,7 +167,52 @@ export const AllEmployee = () => {
       setPagination(arrPages);
     };
     createPages();
-  }, [entries]);
+  }, [entries, employees.length]);
+
+  useEffect(() => {
+    const res = [...employeesArr].sort((a, b) =>
+      stringSort(a.lastname, b.lastname, "asc")
+    );
+    setEmployeesSorted(res);
+  }, [employeesArr]);
+
+  useEffect(() => {
+    const res = [...employeesSorted].filter((employee, idx) => {
+      if (currentPage === 1) {
+        return idx < entries;
+      } else {
+        return (
+          idx >= entries * currentPage - entries + 1 &&
+          idx < entries * currentPage + 1
+        );
+      }
+    });
+    setEmployeesFiltered(res);
+  }, [employeesSorted, entries, currentPage]);
+
+  const handleSearch = (e) => {
+    const res = [...employeesSorted].filter((employee, idx) => {
+      if (e.target.value) {
+        for (const [key, val] of Object.entries(employee)) {
+          if (typeof val === "number") {
+            const valString = toString(val);
+            if (
+              valString.toLowerCase().includes(e.target.value.toLowerCase())
+            ) {
+              return employee;
+            }
+          } else {
+            if (val.toLowerCase().includes(e.target.value.toLowerCase())) {
+              return employee;
+            }
+          }
+        }
+      } else {
+        return idx < entries;
+      }
+    });
+    setEmployeesFiltered(res);
+  };
 
   return (
     <ContainerTable>
@@ -182,7 +230,7 @@ export const AllEmployee = () => {
         </TableEntrieFilter>
         <TableSearch>
           search
-          <input type="text" />
+          <input type="text" onChange={(e) => handleSearch(e)} />
         </TableSearch>
       </TableHeader>
 
@@ -265,28 +313,22 @@ export const AllEmployee = () => {
           </tr>
         </thead>
         <tbody>
-          {employeesArr.length > 0 ? (
-            employeesArr
-              .filter((employee, idx) => {
-                return currentPages !== 1
-                  ? idx <= entries * currentPages
-                  : idx < entries;
-              })
-              .map((employee, idx) => {
-                return (
-                  <tr key={idx}>
-                    <td>{employee.firstname}</td>
-                    <td>{employee.lastname}</td>
-                    <td>{employee.startdate}</td>
-                    <td>{employee.department}</td>
-                    <td>{employee.birthdate}</td>
-                    <td>{employee.street}</td>
-                    <td>{employee.city}</td>
-                    <td>{employee.state}</td>
-                    <td>{employee.zipcode}</td>
-                  </tr>
-                );
-              })
+          {employeesFiltered && employeesFiltered.length > 0 ? (
+            [...employeesFiltered].map((employee, idx) => {
+              return (
+                <tr key={idx}>
+                  <td>{employee.firstname}</td>
+                  <td>{employee.lastname}</td>
+                  <td>{employee.startdate}</td>
+                  <td>{employee.department}</td>
+                  <td>{employee.birthdate}</td>
+                  <td>{employee.street}</td>
+                  <td>{employee.city}</td>
+                  <td>{employee.state}</td>
+                  <td>{employee.zipcode}</td>
+                </tr>
+              );
+            })
           ) : (
             <tr className="fullwidth">
               <td>No Employee</td>
@@ -297,9 +339,9 @@ export const AllEmployee = () => {
       <Footer>
         <span>
           Showing
-          {entries * currentPages - entries}
+          {entries * currentPage - entries + 1}
           to
-          {entries * currentPages}
+          {entries * currentPage}
           of
           {employees.length}
           entries
