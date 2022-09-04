@@ -14,24 +14,25 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
   }
-
   #root{
     width: 100vw;
     height: 100vh;
   }
-
-  li{
-    list-style-type: none;
+  h1 {
+    margin-top: 40px;
+    font-size: 2rem;
   }
   ul{
     padding: 0;
+    flex-wrap: wrap;
+  }
+  li{
+    list-style-type: none;
   }
   a{
     text-decoration: none;
   }
-
-  & h1 {
-    margin-top: 40px;
-    font-size: 2rem;
+  .boldStyle{
+    font-weight: 600;
   }
 `;

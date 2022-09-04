@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import logo from "../assets/HRNet-.png";
 import styled from "styled-components";
+
 import { Tab } from "./Tab";
+import logo from "../assets/HRNet-.png";
 
 export const NavBar = () => {
   return (
