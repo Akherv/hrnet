@@ -1,449 +1,97 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { dateSort, stringSort } from "./Utils";
-import { SortIcon } from "../SortIcon";
-import { CustomTableFooter } from "./CustomTableFooter";
+import { filterRows, sortRows, paginateRows } from "./utils/Utils";
+import { CustomTableHeader } from "./components/CustomTableHeader";
+import { CustomTableBody } from "./components/CustomTableBody";
+import { CustomTableFooter } from "./components/CustomTableFooter";
 
 export const CustomTable = () => {
+  //fetch the datas from the store
   const employees = useSelector((state) => state.employee.arr);
 
-  const [entries, setEntries] = useState(10);
-  // eslint-disable-next-line no-unused-vars
-  const [employeesArr, setEmployeesArr] = useState(employees);
-  const [currentPage, setcurrentPage] = useState(1);
-  const [employeesSorted, setEmployeesSorted] = useState([]);
-  const [employeesFiltered, setEmployeesFiltered] = useState([]);
-  const [employeesSearchSorted, setEmployeesSearchSorted] = useState([]);
-  const [employeesSearch, setEmployeesSearch] = useState([]);
-  const [type, setType] = useState(true);
+  //Define the table h1
+  const tableTitle = "All Employee";
+
+  //Define the columns title & type
+  const columns = [
+    { title: "Firstname", type: "firstname" },
+    { title: "Lastname", type: "lastname" },
+    { title: "Start Date", type: "startdate" },
+    { title: "Department", type: "department" },
+    { title: "Birth Date", type: "birthdate" },
+    { title: "Street", type: "street" },
+    { title: "City", type: "city" },
+    { title: "State", type: "state" },
+    { title: "Zip Code", type: "zipcode" },
+  ];
+  const [rows, setRows] = useState([]);
+
+  //Fill the rows local state with the datas fetched from the store
+  useEffect(() => {
+    setRows(employees);
+  }, [employees]);
+
+  //Initialize the other local states needed for dropdown/searchbar/sorting/pagination
+  const [maxRows, setMaxRows] = useState(10);
   const [searchWord, setSearchWord] = useState([]);
+  const [sort, setSort] = useState({ order: "up", type: "lastname" });
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const handleSortColumn = (column) => {
-    switch (column) {
-      case "firstname":
-        employeesSearch.length > 0
-          ? setEmployeesSearchSorted(
-              [...employeesSearch].sort((a, b) =>
-                stringSort(a.firstname, b.firstname, type)
-              )
-            )
-          : setEmployeesSorted(
-              [...employees].sort((a, b) =>
-                stringSort(a.firstname, b.firstname, type)
-              )
-            );
-        break;
-      case "lastname":
-        employeesSearch.length > 0
-          ? setEmployeesSearchSorted(
-              [...employeesSearch].sort((a, b) =>
-                stringSort(a.lastname, b.lastname, type)
-              )
-            )
-          : setEmployeesSorted(
-              [...employees].sort((a, b) =>
-                stringSort(a.lastname, b.lastname, type)
-              )
-            );
-        break;
-      case "startdate":
-        employeesSearch.length > 0
-          ? setEmployeesSearchSorted(
-              [...employeesSearch].sort((a, b) =>
-                dateSort(a.startdate, b.startdate, type)
-              )
-            )
-          : setEmployeesSorted(
-              [...employees].sort((a, b) =>
-                dateSort(a.startdate, b.startdate, type)
-              )
-            );
-        break;
-      case "department":
-        employeesSearch.length > 0
-          ? setEmployeesSearchSorted(
-              [...employeesSearch].sort((a, b) =>
-                stringSort(a.department, b.department, type)
-              )
-            )
-          : setEmployeesSorted(
-              [...employees].sort((a, b) =>
-                stringSort(a.department, b.department, type)
-              )
-            );
-        break;
-      case "birthdate":
-        employeesSearch.length > 0
-          ? setEmployeesSearchSorted(
-              [...employeesSearch].sort((a, b) =>
-                dateSort(a.birthdate, b.birthdate, type)
-              )
-            )
-          : setEmployeesSorted(
-              [...employees].sort((a, b) =>
-                dateSort(a.birthdate, b.birthdate, type)
-              )
-            );
-        break;
-      case "street":
-        employeesSearch.length > 0
-          ? setEmployeesSearchSorted(
-              [...employeesSearch].sort((a, b) =>
-                stringSort(a.street, b.street, type)
-              )
-            )
-          : setEmployeesSorted(
-              [...employees].sort((a, b) =>
-                stringSort(a.street, b.street, type)
-              )
-            );
-        break;
-      case "city":
-        employeesSearch.length > 0
-          ? setEmployeesSearchSorted(
-              [...employeesSearch].sort((a, b) =>
-                stringSort(a.city, b.city, type)
-              )
-            )
-          : setEmployeesSorted(
-              [...employees].sort((a, b) => stringSort(a.city, b.city, type))
-            );
-        break;
-      case "state":
-        employeesSearch.length > 0
-          ? setEmployeesSearchSorted(
-              [...employeesSearch].sort((a, b) =>
-                stringSort(a.state, b.state, type)
-              )
-            )
-          : setEmployeesSorted(
-              [...employees].sort((a, b) => stringSort(a.state, b.state, type))
-            );
-        break;
-      case "zipcode":
-        employeesSearch.length > 0
-          ? setEmployeesSearchSorted(
-              [...employeesSearch].sort((a, b) =>
-                type ? b.zipcode - a.zipcode : a.zipcode - b.zipcode
-              )
-            )
-          : setEmployeesSorted(
-              [...employees].sort((a, b) =>
-                type ? b.zipcode - a.zipcode : a.zipcode - b.zipcode
-              )
-            );
-        break;
-      default:
-        employeesSearch.length > 0
-          ? setEmployeesSearchSorted(
-              [...employeesSearch].sort((a, b) =>
-                stringSort(a.lastname, b.lastname, type)
-              )
-            )
-          : setEmployeesSorted(
-              [...employees].sort((a, b) =>
-                stringSort(a.lastname, b.lastname, type)
-              )
-            );
-        break;
-    }
-  };
+  const filteredRows = useMemo(
+    () => filterRows(rows, searchWord),
+    [rows, searchWord]
+  );
+  const sortedRows = useMemo(
+    () => sortRows(filteredRows, sort),
+    [filteredRows, sort]
+  );
+  const calculatedRows = paginateRows(sortedRows, currentPage, maxRows);
+  const totalRows = filteredRows.length;
+  const totalPages = Math.ceil(totalRows / maxRows);
 
-  const handleFilterEntries = (e) => {
-    // setEmployeesSorted(
-    //   [...employeesSorted].filter((employee, idx) => {
-    //     return idx <= e.target.value;
-    //   })
-    // );
-    setEntries(e.target.value);
-    setcurrentPage(1);
-  };
-
-  const handleFilterPages = (el, pagesIdx) => {
-    employeesSearchSorted.length > 0
-      ? setEmployeesFiltered(
-          [...employeesSearchSorted].filter((employee, idx) => {
-            return (
-              idx >= entries * (pagesIdx + 1) - entries &&
-              idx < entries * (pagesIdx + 1)
-            );
-          })
-        )
-      : setEmployeesFiltered(
-          [...employeesSorted].filter((employee, idx) => {
-            return (
-              idx >= entries * (pagesIdx + 1) - entries &&
-              idx < entries * (pagesIdx + 1)
-            );
-          })
-        );
-    setcurrentPage(pagesIdx + 1);
-  };
-
-  useEffect(() => {
-    const res = [...employeesArr].sort((a, b) =>
-      stringSort(a.lastname, b.lastname, "asc")
-    );
-    setEmployeesSorted(res);
-  }, [employeesArr]);
-
-  useEffect(() => {
-    const res = [...employeesSearchSorted].filter((employee, idx) => {
-      return (
-        idx >= entries * currentPage - entries && idx < entries * currentPage
-      );
-    });
-    setEmployeesFiltered(res);
-  }, [employeesSearchSorted, currentPage, entries]);
-
-  //
-  useEffect(() => {
-    const res =
-      employeesSearch.length > 0
-        ? [...employeesSearch].filter((employee, idx) => {
-            if (currentPage === 1) {
-              return idx < entries;
-            } else {
-              return (
-                idx >= entries * currentPage - entries + 1 &&
-                idx < entries * currentPage + 1
-              );
-            }
-          })
-        : [...employeesSorted].filter((employee, idx) => {
-            if (currentPage === 1) {
-              return idx < entries;
-            } else {
-              return (
-                idx >= entries * currentPage - entries + 1 &&
-                idx < entries * currentPage + 1
-              );
-            }
-          });
-    setEmployeesFiltered(res);
-  }, [employeesSearch, employeesSorted, entries, currentPage]);
-
+  //Handle search feature => update the searchword local state & set the currentPage to the first page
   const handleSearch = (e) => {
     if (e.target.value.length === 0) {
-      [...employeesSorted].filter((employee, idx) => {
-        setEmployeesSearch([]);
-        setcurrentPage(1);
-        setSearchWord([]);
-        return idx < entries;
-      });
+      setSearchWord([]);
     } else {
-      let arrVal = [];
-      // eslint-disable-next-line array-callback-return
-      const res = [...employeesSorted].filter((employee) => {
-        for (const [, val] of Object.entries(employee)) {
-          if (typeof val === "number") {
-            const valString = toString(val);
-            if (
-              valString.toLowerCase().includes(e.target.value.toLowerCase())
-            ) {
-              arrVal.push(val);
-              return employee;
-            }
-          } else {
-            if (val.toLowerCase().includes(e.target.value.toLowerCase())) {
-              arrVal.push(val);
-              return employee;
-            }
-          }
-        }
-        setSearchWord(arrVal);
-      });
-      setEmployeesSearch(res);
-      setEmployeesFiltered(res);
+      setSearchWord(e.target.value.toLowerCase());
     }
+    setCurrentPage(1);
   };
 
-  const handleType = (typeRes) => {
-    setType(typeRes);
+  //Handle sort feature => update the sort local state & set the currentPage to the first page
+  const handleSortColumn = (column) => {
+    setSort((sort) => ({
+      order: sort.order === "up" && sort.type === column ? "down" : "up",
+      type: column,
+    }));
+    setCurrentPage(1);
+  };
+
+  //Handle limitation entries feature => update the maxRows local state & set the currentPage to the first page
+  const handleFilter = (e) => {
+    setMaxRows(parseInt(e.target.value));
+    setCurrentPage(1);
   };
 
   return (
     <ContainerTable>
-      <h1>All Employee</h1>
-      <TableHeader>
-        <TableEntrieFilter>
-          <span>Show</span>
-          <select onChange={(e) => handleFilterEntries(e)}>
-            <option>10</option>
-            <option>25</option>
-            <option>50</option>
-            <option>100</option>
-          </select>
-          <span>entries</span>
-        </TableEntrieFilter>
-        <TableSearch>
-          <span>search</span>
-          <input type="text" onChange={(e) => handleSearch(e)} />
-        </TableSearch>
-      </TableHeader>
-      <Table>
-        <thead>
-          <tr>
-            <td>
-              First Name
-              <IconSort onClick={() => handleSortColumn("firstname")}>
-                <SortIcon handleType={handleType} />
-              </IconSort>
-            </td>
-            <td>
-              Last Name
-              <IconSort onClick={() => handleSortColumn("lastname")}>
-                <SortIcon handleType={handleType} />
-              </IconSort>
-            </td>
-            <td>
-              Start Date{" "}
-              <IconSort onClick={() => handleSortColumn("startdate")}>
-                <SortIcon handleType={handleType} />
-              </IconSort>
-            </td>
-            <td>
-              Departement{" "}
-              <IconSort onClick={() => handleSortColumn("department")}>
-                <SortIcon handleType={handleType} />
-              </IconSort>
-            </td>
-            <td>
-              Date of Birth{" "}
-              <IconSort onClick={() => handleSortColumn("birthdate")}>
-                <SortIcon handleType={handleType} />
-              </IconSort>
-            </td>
-            <td>
-              Street{" "}
-              <IconSort onClick={() => handleSortColumn("street")}>
-                <SortIcon handleType={handleType} />
-              </IconSort>
-            </td>
-            <td>
-              City{" "}
-              <IconSort onClick={() => handleSortColumn("city")}>
-                <SortIcon handleType={handleType} />
-              </IconSort>
-            </td>
-            <td>
-              State{" "}
-              <IconSort onClick={() => handleSortColumn("state")}>
-                <SortIcon handleType={handleType} />
-              </IconSort>
-            </td>
-            <td>
-              ZIP Code{" "}
-              <IconSort onClick={() => handleSortColumn("zipcode")}>
-                <SortIcon handleType={handleType} />
-              </IconSort>
-            </td>
-          </tr>
-        </thead>
-        <tbody>
-          {employeesFiltered && employeesFiltered.length > 0 ? (
-            [...employeesFiltered].map((employee, idx) => {
-              return (
-                <tr key={idx}>
-                  <td
-                    className={
-                      searchWord && searchWord.includes(employee.firstname)
-                        ? "boldStyle"
-                        : ""
-                    }
-                  >
-                    {employee.firstname}
-                  </td>
-                  <td
-                    className={
-                      searchWord && searchWord.includes(employee.lastname)
-                        ? "boldStyle"
-                        : ""
-                    }
-                  >
-                    {employee.lastname}
-                  </td>
-                  <td
-                    className={
-                      searchWord && searchWord.includes(employee.startdate)
-                        ? "boldStyle"
-                        : ""
-                    }
-                  >
-                    {employee.startdate}
-                  </td>
-                  <td
-                    className={
-                      searchWord && searchWord.includes(employee.department)
-                        ? "boldStyle"
-                        : ""
-                    }
-                  >
-                    {employee.department}
-                  </td>
-                  <td
-                    className={
-                      searchWord && searchWord.includes(employee.birthdate)
-                        ? "boldStyle"
-                        : ""
-                    }
-                  >
-                    {employee.birthdate}
-                  </td>
-                  <td
-                    className={
-                      searchWord && searchWord.includes(employee.street)
-                        ? "boldStyle"
-                        : ""
-                    }
-                  >
-                    {employee.street}
-                  </td>
-                  <td
-                    className={
-                      searchWord && searchWord.includes(employee.city)
-                        ? "boldStyle"
-                        : ""
-                    }
-                  >
-                    {employee.city}
-                  </td>
-                  <td
-                    className={
-                      searchWord && searchWord.includes(employee.state)
-                        ? "boldStyle"
-                        : ""
-                    }
-                  >
-                    {employee.state}
-                  </td>
-                  <td
-                    className={
-                      searchWord && searchWord.includes(employee.zipcode)
-                        ? "boldStyle"
-                        : ""
-                    }
-                  >
-                    {employee.zipcode}
-                  </td>
-                </tr>
-              );
-            })
-          ) : (
-            <tr className="fullwidth">
-              <td>No Employee</td>
-            </tr>
-          )}
-        </tbody>
-      </Table>
+      <h1>{tableTitle}</h1>
+      <CustomTableHeader onFilter={handleFilter} onSearch={handleSearch} />
+      <CustomTableBody
+        columns={columns}
+        onSort={handleSortColumn}
+        sort={sort}
+        calculatedRows={calculatedRows}
+        searchWord={searchWord}
+      />
       <CustomTableFooter
-        employees={employees}
-        employeesSearch={employeesSearch}
-        entries={entries}
         currentPage={currentPage}
-        handleFilterPages={handleFilterPages}
-        employeesFiltered={employeesFiltered}
+        setCurrentPage={setCurrentPage}
+        maxRows={maxRows}
+        totalRows={totalRows}
+        totalPages={totalPages}
       />
     </ContainerTable>
   );
@@ -454,69 +102,7 @@ const ContainerTable = styled.section`
   flex-direction: column;
   padding: 0 2em;
 
-  & table {
-    width: 100%;
-    /* background-color: #c9d8c5; */
-    & thead {
-      display: block;
-      height: 10%;
-      border-bottom: 1px solid grey;
-
-      & td {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-    }
-    & tbody {
-      height: 100%;
-    }
-    & tr {
-      display: grid;
-      grid-template-columns: repeat(9, 1fr);
-      border-radius: 5px;
-
-      & td {
-        padding: 0.5em;
-      }
-
-      &.fullwidth {
-        grid-template-columns: 1fr;
-      }
-    }
-    & tr:nth-of-type(2n) {
-      background-color: whitesmoke;
-    }
+  @media screen and (max-width: 1200px) {
+    padding: 0;
   }
-`;
-
-const TableHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const TableEntrieFilter = styled.span`
-  margin-bottom: 2em;
-  & span {
-    margin: 0 0.2em;
-  }
-`;
-
-const TableSearch = styled.div`
-  margin-bottom: 2em;
-  & span {
-    margin-right: 0.2em;
-  }
-`;
-
-const Table = styled.table`
-  & thead {
-    & td {
-      font-weight: 600;
-    }
-  }
-`;
-
-const IconSort = styled.span`
-  cursor: pointer;
 `;

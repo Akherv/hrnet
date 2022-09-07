@@ -27,7 +27,6 @@ export const NewEmployee = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(createNewEmployee(employee));
-    console.log(employee);
   };
 
   return (
@@ -180,6 +179,11 @@ const ContainerForm = styled.section`
     max-width: 800px;
     margin: auto;
     padding: 2em;
+  }
+
+  @media screen and (max-width: 1200px) {
+    width: 100vw;
+    justify-content: center;
   }
 `;
 

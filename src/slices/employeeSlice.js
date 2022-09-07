@@ -47,7 +47,6 @@ export const employeeSlice = createSlice({
       } else return state;
     });
     builder.addCase(loadEmployee.rejected, (state, action) => {
-      console.log(action);
       return {
         ...state,
         loadStatus: "rejected",

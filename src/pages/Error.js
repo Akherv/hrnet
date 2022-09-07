@@ -9,6 +9,7 @@ export function Error() {
   );
 }
 const ErrorContainer = styled.section`
+  width: 100vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
