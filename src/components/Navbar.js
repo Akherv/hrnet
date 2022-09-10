@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Tab } from "./Tab";
 import logo from "../assets/HRNet-.png";
@@ -32,19 +31,19 @@ export const NavBar = () => {
 
 const NavMobil = styled.div`
   display: none;
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1320px) {
     font-size: 3rem;
-    margin: 0.1em 0.5em;
+    margin: 0.5em;
     display: block;
     position: absolute;
   }
 `;
 
 const Nav = styled.nav`
-  background-color: #131c38;
+  background-color: #1d3354;
   padding: 0 25px;
 
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1320px) {
     transform: scale(0);
     &.show {
       transform: scale(1);
@@ -52,6 +51,8 @@ const Nav = styled.nav`
       top: 0;
       left: 0;
       height: 100vh;
+      z-index: 5;
+      border-right: 1px solid white;
     }
     &.hide {
       display: none;
@@ -62,9 +63,9 @@ const Nav = styled.nav`
 const NavLogo = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 40px;
+  margin-top: 35px;
   font-weight: bold;
-  color: #2c3e50;
+  color: #1d3354;
   max-width: 100%;
 
   & span {

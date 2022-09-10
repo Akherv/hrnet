@@ -1,4 +1,4 @@
-import { normalize } from "../utils/Utils";
+import { normalize, normalizeSearch } from "../utils/Utils";
 import { CustomTableSort } from "../features/CustomTableSort";
 import styled from "styled-components";
 import { useState } from "react";
@@ -11,13 +11,23 @@ export const CustomTableBody = ({
   searchWord,
 }) => {
   const [toggleOpen, setToggleOpen] = useState(false);
+
   return (
     <Table>
       <thead>
-        <tr className="sortTitle" onClick={() => setToggleOpen(!toggleOpen)}>
-          <td>Sort table {toggleOpen === false ? "▲" : "▼"}</td>
-        </tr>
-        <tr className={toggleOpen === false ? "hide" : ""}>
+        <CustomTr
+          className="sortTitle"
+          onClick={() => setToggleOpen(!toggleOpen)}
+          numberCol={columns.length}
+        >
+          <td>
+            Sort table <span>{toggleOpen === false ? "▲" : "▼"}</span>
+          </td>
+        </CustomTr>
+        <CustomTr
+          className={toggleOpen === false ? "hide" : ""}
+          numberCol={columns.length}
+        >
           {columns.map((column, idx) => {
             return (
               <td key={idx}>
@@ -30,49 +40,82 @@ export const CustomTableBody = ({
               </td>
             );
           })}
-        </tr>
+        </CustomTr>
       </thead>
       <tbody>
-        {calculatedRows.map((row) => {
-          return (
-            <tr key={row.id}>
-              {columns.map((column, idx) => {
-                return (
-                  <td
-                    className={
-                      searchWord.length !== 0 &&
-                      normalize(row[column.type])
-                        .toString()
-                        .includes(searchWord)
-                        ? "boldStyle"
-                        : ""
-                    }
-                    key={idx}
-                  >
-                    {row[column.type]}
-                  </td>
-                );
-              })}
-            </tr>
-          );
-        })}
+        {calculatedRows.length > 0 ? (
+          calculatedRows.map((row) => {
+            return (
+              <CustomTr key={row.id} numberCol={columns.length}>
+                {columns.map((column, idx) => {
+                  return (
+                    <td
+                      className={
+                        searchWord.length !== 0 &&
+                        normalizeSearch(row[column.type])
+                          .toString()
+                          .includes(searchWord)
+                          ? "boldStyle"
+                          : ""
+                      }
+                      key={idx}
+                      style={{
+                        backgroundColor:
+                          column.type === sort.type
+                            ? "rgba(255, 255, 255, 0.5)"
+                            : "",
+                      }}
+                      title={row[column.type]}
+                      data-label={column.title}
+                    >
+                      <span className="columnTitle">{`${column.title} :`}</span>
+                      {row[column.type]}
+                    </td>
+                  );
+                })}
+              </CustomTr>
+            );
+          })
+        ) : (
+          <tr>
+            <td>No matching</td>
+          </tr>
+        )}
       </tbody>
     </Table>
   );
 };
 const Table = styled.table`
+  border-collapse: collapse;
+  border-spacing: 0px;
   width: 100%;
+  margin-top: 2em;
   & thead {
     display: block;
-    height: 10%;
     border-bottom: 1px solid grey;
+    background-color: #1d3354;
+    color: white;
+
+    & tr {
+      padding: 0;
+    }
+    & .sortTitle {
+      display: none;
+      font-size: 16px;
+      & td > span {
+        font-size: 20px;
+      }
+    }
     & td {
       display: flex;
-      justify-content: center;
-      align-items: center;
       font-weight: 600;
-      & span {
-        margin: 0.2em;
+      justify-content: space-between;
+      & :last-child {
+        width: 40px;
+        //font-size: 20px;
+        margin: 0 0.2em 0 0;
+        display: flex;
+        justify-content: flex-end;
       }
     }
   }
@@ -80,75 +123,116 @@ const Table = styled.table`
   & tbody {
     height: 100%;
 
+    & tr:nth-of-type(1n) {
+      background-color: #c9d8c5;
+    }
+
     & tr:nth-of-type(2n) {
       background-color: whitesmoke;
     }
-  }
-  & tr {
-    display: grid;
-    grid-template-columns: repeat(9, 1fr);
-    border-radius: 5px;
-
-    &.sortTitle {
-      transform: scale(0);
-    }
-
     & td {
-      padding: 0.5em;
-    }
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 18px;
+      height: 30px;
 
-    &.fullwidth {
-      grid-template-columns: 1fr;
+      &.hide {
+        display: none;
+      }
+
+      & span {
+        display: none;
+        font-weight: 600;
+        margin: 0 0.2em;
+      }
     }
   }
 
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1320px) {
     order: 2;
-    background-color: rgba(255, 255, 255, 0.2);
-
+    //background-color: rgba(255, 255, 255, 0.2);
+    padding-top: 2em;
+    margin-top: 0;
     & thead {
       justify-content: center;
+      background-color: #e4ebe2;
+      color: #1d3354;
+      & .sortTitle {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        //padding: 1em 0;
+        border-radius: 0;
+        display: block;
+        cursor: pointer;
+        box-shadow: 1px 1px 1px gray;
+        background-color: #e4ebe2;
+        color: #1d3354;
+      }
     }
 
     thead > tr {
-      width: 80%;
+      width: 100%;
       display: flex;
-      justify-content: center;
+      //justify-content: center;
       flex-wrap: wrap;
       margin: 1em auto;
-      &.sortTitle {
+      /* & .sortTitle {
         height: 100%;
         width: 100%;
         margin: 0;
         padding: 1em 0;
-        transform: scale(1);
-        display: block;
         border-radius: 0;
+        display: block;
         cursor: pointer;
         box-shadow: 1px 1px 1px gray;
-        background-color: rgba(255, 255, 255, 0.5);
-      }
+        background-color: #e4ebe2;
+        color: #1D3354;
+      } */
       & td {
-        display: inline;
+        /* display: inline;
         text-align: left;
-        width: 150px;
+        width: 150px; */
       }
       &.hide {
         display: none;
+      }
+
+      & td {
+        & :last-child {
+          width: 20px;
+        }
       }
     }
     tbody {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
+      background-color: #1d3354;
+      padding: 1em;
+
+      & tr:nth-of-type(2n) {
+        background-color: #c9d8c5;
+      }
+
+      & td {
+        & span {
+          display: inline-block;
+        }
+      }
     }
     tbody > tr {
       width: 33%;
-      min-width: 250px;
+      //min-width: 250px;
       display: flex;
       flex-direction: column;
-      box-shadow: 0px -5px 5px rgba(201, 216, 197, 0.8);
-      border-bottom: 2px solid gray;
+      //box-shadow: 0px -5px 5px rgba(201, 216, 197, 0.8);
+      //border-bottom: 2px solid red;
+
+      margin: 0.5em;
     }
   }
   @media screen and (max-width: 800px) {
@@ -159,7 +243,22 @@ const Table = styled.table`
 
   @media screen and (max-width: 600px) {
     tbody > tr {
-      width: 100%;
+      width: 80%;
+      margin: 0 0 0.5em;
     }
+  }
+`;
+
+const CustomTr = styled.tr`
+  display: grid;
+  grid-template-columns: ${(props) => `repeat(${props.numberCol}, 1fr)`};
+  border-radius: 5px;
+
+  & td {
+    padding: 0.5em 1em 0.5em;
+  }
+
+  &.fullwidth {
+    grid-template-columns: 1fr;
   }
 `;

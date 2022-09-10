@@ -11,7 +11,7 @@ export const CustomTable = () => {
   const employees = useSelector((state) => state.employee.arr);
 
   //Define the table h1
-  const tableTitle = "All Employee";
+  const tableTitle = "All Employees";
 
   //Define the columns title & type
   const columns = [
@@ -55,7 +55,7 @@ export const CustomTable = () => {
     if (e.target.value.length === 0) {
       setSearchWord([]);
     } else {
-      setSearchWord(e.target.value.toLowerCase());
+      setSearchWord(e.target.value.toLowerCase().trim());
     }
     setCurrentPage(1);
   };
@@ -79,13 +79,15 @@ export const CustomTable = () => {
     <ContainerTable>
       <h1>{tableTitle}</h1>
       <CustomTableHeader onFilter={handleFilter} onSearch={handleSearch} />
-      <CustomTableBody
-        columns={columns}
-        onSort={handleSortColumn}
-        sort={sort}
-        calculatedRows={calculatedRows}
-        searchWord={searchWord}
-      />
+      <Wrapper>
+        <CustomTableBody
+          columns={columns}
+          onSort={handleSortColumn}
+          sort={sort}
+          calculatedRows={calculatedRows}
+          searchWord={searchWord}
+        />
+      </Wrapper>
       <CustomTableFooter
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
@@ -102,7 +104,30 @@ const ContainerTable = styled.section`
   flex-direction: column;
   padding: 0 2em;
 
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1320px) {
     padding: 0;
+    h1 {
+      text-align: center;
+    }
+  }
+`;
+
+const Wrapper = styled.div`
+  max-width: calc(100vw - 250px);
+  overflow-x: scroll;
+  /* ::-webkit-scrollbar {
+    display: none;
+  } */
+  /* -ms-overflow-style: none;
+  scrollbar-width: none; */
+  scrollbar-color: #f5f5f5 #c9d8c5;
+  ::-webkit-scrollbar {
+    cursor: pointer;
+  }
+  @media screen and (max-width: 1320px) {
+    max-width: unset;
+    order: 1;
+
+    background-color: #1d3354;
   }
 `;

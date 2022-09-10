@@ -14,7 +14,7 @@ export const CustomTableHeader = ({ onFilter, onSearch }) => {
 const TableHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1320px) {
     flex-wrap: wrap;
     justify-content: center;
   }

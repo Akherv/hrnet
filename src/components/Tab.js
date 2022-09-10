@@ -27,12 +27,13 @@ const TabLink = styled(StyledLink)`
   align-items: center;
   &:hover > i,
   &:hover > span {
-    color: #ee6338;
+    color: #f39237;
   }
 `;
 
 const TabElement = styled.li`
   margin-top: 2em;
+  text-align: center;
 `;
 
 const Icon = styled.i`

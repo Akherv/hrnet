@@ -9,10 +9,12 @@ export function Error() {
   );
 }
 const ErrorContainer = styled.section`
-  width: 100vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #c9d8c5;
+  @media screen and (max-width: 1320px) {
+    width: 100vw;
+  }
 `;

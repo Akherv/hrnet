@@ -17,7 +17,8 @@ export const CustomTableFilter = ({ onFilter }) => {
 };
 
 const TableFilter = styled.span`
-  margin-bottom: 2em;
+  padding: 0 1em;
+  margin-bottom: 1em;
   & span {
     margin: 0 0.2em;
   }

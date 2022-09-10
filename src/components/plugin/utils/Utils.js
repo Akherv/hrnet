@@ -13,13 +13,23 @@ export const normalize = (val) => {
   }
 };
 
+export const normalizeSearch = (val) => {
+  if (typeof val === "number") {
+    return val.toString().toLowerCase();
+  }
+
+  if (typeof val === "string") {
+    return val.toLowerCase();
+  }
+};
+
 export const filterRows = (rows, searchWord) => {
   if (searchWord.length === 0) return rows;
 
   return rows.filter((row) => {
     let arrVal = [];
     for (const [, val] of Object.entries(row)) {
-      if (normalize(val).toString().includes(searchWord)) {
+      if (normalizeSearch(val).toString().includes(searchWord)) {
         arrVal.push(val);
         return row;
       }

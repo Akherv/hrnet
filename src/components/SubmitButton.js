@@ -14,6 +14,6 @@ const ButtonContainer = styled.button`
   margin: 2rem auto;
   border: none;
   border-radius: 5px;
-  background-color: #131c38;
+  background-color: #1d3354;
   color: #fff;
 `;

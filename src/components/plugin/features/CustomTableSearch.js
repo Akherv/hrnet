@@ -10,9 +10,9 @@ export const CustomTableSearch = ({ onSearch }) => {
 };
 
 const TableSearch = styled.div`
-  margin-bottom: 2em;
+  padding: 0 1em;
   & span {
-    margin: 0 0.2em 0 2em;
+    margin: 0 0.2em;
   }
   & input {
     padding: 0.4em 1em;

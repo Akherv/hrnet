@@ -1,24 +1,23 @@
 import styled from "styled-components";
+import { Login } from "../components/Login";
 
 export const Home = () => {
   return (
     <HomeContainer>
-      <h1>Welcome back !</h1>
+      <Login />
     </HomeContainer>
   );
 };
 
 const HomeContainer = styled.section`
-  width: 100vw;
   background-color: #c9d8c5;
   display: flex;
-  justify-content: flex-start;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
 
-  & h1 {
-    margin-left: 2em;
-  }
-
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1320px) {
+    width: 100vw;
     justify-content: center;
   }
 `;
