@@ -1,30 +1,71 @@
-//import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-export const Modal = ({ toggleOpen }) => {
-  // let navigate = useNavigate();
-  // const valid = true;
+export const Modal = ({ toggleOpen, setToggleOpen }) => {
+  let navigate = useNavigate();
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (valid) {
-  //     return navigate("/newemployee");
-  //   }
-  // };
-
+  const handleNavigate = (e) => {
+    e.preventDefault();
+    navigate("/allemployee");
+    setToggleOpen(false);
+  };
+  console.log(toggleOpen);
   return (
-    <ModalContainer className={toggleOpen ? "show" : "hide"}></ModalContainer>
+    <ModalContainer
+      className={toggleOpen ? "showModal" : "hideModal"}
+      style={{ display: toggleOpen ? "block" : "none" }}
+    >
+      <ModalContent>
+        A new Employee has been saved on the table
+        <button onClick={handleNavigate}>OK</button>
+      </ModalContent>
+    </ModalContainer>
   );
 };
 
 const ModalContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: gray;
-  .hide {
-    display: none;
+  /* .hideModal {
+    display: none !important;
+    width: 0;
+    height: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    position: inherit;
+  }*/
+  &.showModal {
+    display: block !important;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    position: absolute;
+    top: 0;
+    left: 0;
   }
-  .show {
+`;
+
+const ModalContent = styled.div`
+  width: 50%;
+  height: 50%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  & button {
     display: block;
+    width: 300px;
+    padding: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 2rem auto;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #1d3354;
+    color: white;
   }
 `;

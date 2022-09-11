@@ -1,7 +1,8 @@
 import styled from "styled-components";
 
-export const SubmitButton = () => {
-  return <ButtonContainer>Save</ButtonContainer>;
+export const SubmitButton = ({ allIsValid }) => {
+  //console.log(allIsValid);
+  return <ButtonContainer active={allIsValid}>Save</ButtonContainer>;
 };
 export default SubmitButton;
 
@@ -14,6 +15,7 @@ const ButtonContainer = styled.button`
   margin: 2rem auto;
   border: none;
   border-radius: 5px;
-  background-color: #1d3354;
-  color: #fff;
+  cursor: ${(props) => (props.active ? "pointer" : "not-allowed")};
+  background-color: ${(props) => (props.active ? "#1d3354" : "#fff")};
+  color: ${(props) => (props.active ? "#fff" : "lightgrey")};
 `;
