@@ -34,6 +34,7 @@ export const filterRows = (rows, searchWord) => {
         return row;
       }
     }
+    //return arrVal;
   });
 };
 

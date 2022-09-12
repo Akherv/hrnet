@@ -1,6 +1,7 @@
-import styled from "styled-components";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import styled from "styled-components";
+
 import { loadEmployee } from "../slices/employeeSlice";
 import { CustomTable } from "../components/plugin/CustomTable";
 
@@ -29,6 +30,7 @@ const AllEmployeeContainer = styled.section`
   display: flex;
   flex-direction: column;
   background-color: #c9d8c5;
+
   @media screen and (max-width: 1320px) {
     width: 100vw;
   }

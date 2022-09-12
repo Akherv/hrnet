@@ -1,16 +1,12 @@
-import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+
 import { createNewEmployee } from "../slices/employeeSlice";
 import { FormEmployee } from "../components/FormEmployee";
-import { fabClasses } from "@mui/material";
-import { useCallback } from "react";
-import { useEffect } from "react";
 import { Modal } from "../components/Modal";
 
 export const NewEmployee = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const employees = useSelector((state) => state.employee.arr);
 
@@ -26,7 +22,7 @@ export const NewEmployee = () => {
     zipcode: "",
     department: "",
   });
-  console.log(employee);
+
   const [formValidation, setFormValidation] = useState({
     firstnameIsValid: false,
     lastnameIsValid: false,
@@ -42,7 +38,6 @@ export const NewEmployee = () => {
   const [allFieldsAreValid, setAllFieldsAreValid] = useState(false);
 
   const validateAllFields = (fields) => {
-    //console.log(fields);
     let validity;
     for (const [, value] of Object.entries(fields)) {
       if (value === false) {
@@ -52,7 +47,6 @@ export const NewEmployee = () => {
         validity = true;
       }
     }
-
     setAllFieldsAreValid(validity);
   };
 
@@ -60,7 +54,6 @@ export const NewEmployee = () => {
 
   useEffect(() => {
     validateAllFields(formValidation);
-    //console.log("ok");
   }, [formValidation]);
 
   const handleSubmit = (e) => {

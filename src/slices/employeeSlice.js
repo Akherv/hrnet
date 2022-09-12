@@ -39,7 +39,6 @@ export const employeeSlice = createSlice({
     });
     builder.addCase(loadEmployee.fulfilled, (state, action) => {
       if (action.payload) {
-        console.log(action.payload);
         return {
           arr: Object.assign([...state.arr], action.payload),
           loadStatus: "Fulfilled",

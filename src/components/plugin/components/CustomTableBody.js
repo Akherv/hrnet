@@ -1,7 +1,8 @@
-import { normalize, normalizeSearch } from "../utils/Utils";
-import { CustomTableSort } from "../features/CustomTableSort";
-import styled from "styled-components";
 import { useState } from "react";
+import styled from "styled-components";
+
+import { normalizeSearch } from "../utils/Utils";
+import { CustomTableSort } from "../features/CustomTableSort";
 
 export const CustomTableBody = ({
   columns,
@@ -94,8 +95,7 @@ const Table = styled.table`
     display: block;
     border-bottom: 1px solid grey;
     background-color: #1d3354;
-    color: white;
-
+    color: #fff;
     & tr {
       padding: 0;
     }
@@ -112,21 +112,17 @@ const Table = styled.table`
       justify-content: space-between;
       & :last-child {
         width: 40px;
-        //font-size: 20px;
         margin: 0 0.2em 0 0;
         display: flex;
         justify-content: flex-end;
       }
     }
   }
-
   & tbody {
     height: 100%;
-
     & tr:nth-of-type(1n) {
       background-color: #c9d8c5;
     }
-
     & tr:nth-of-type(2n) {
       background-color: whitesmoke;
     }
@@ -138,11 +134,9 @@ const Table = styled.table`
       text-overflow: ellipsis;
       line-height: 18px;
       height: 30px;
-
       &.hide {
         display: none;
       }
-
       & span {
         display: none;
         font-weight: 600;
@@ -153,7 +147,6 @@ const Table = styled.table`
 
   @media screen and (max-width: 1320px) {
     order: 2;
-    //background-color: rgba(255, 255, 255, 0.2);
     padding-top: 2em;
     margin-top: 0;
     & thead {
@@ -164,7 +157,6 @@ const Table = styled.table`
         height: 100%;
         width: 100%;
         margin: 0;
-        //padding: 1em 0;
         border-radius: 0;
         display: block;
         cursor: pointer;
@@ -177,30 +169,11 @@ const Table = styled.table`
     thead > tr {
       width: 100%;
       display: flex;
-      //justify-content: center;
       flex-wrap: wrap;
       margin: 1em auto;
-      /* & .sortTitle {
-        height: 100%;
-        width: 100%;
-        margin: 0;
-        padding: 1em 0;
-        border-radius: 0;
-        display: block;
-        cursor: pointer;
-        box-shadow: 1px 1px 1px gray;
-        background-color: #e4ebe2;
-        color: #1D3354;
-      } */
-      & td {
-        /* display: inline;
-        text-align: left;
-        width: 150px; */
-      }
       &.hide {
         display: none;
       }
-
       & td {
         & :last-child {
           width: 20px;
@@ -213,11 +186,9 @@ const Table = styled.table`
       justify-content: center;
       background-color: #1d3354;
       padding: 1em;
-
       & tr:nth-of-type(2n) {
         background-color: #c9d8c5;
       }
-
       & td {
         & span {
           display: inline-block;
@@ -226,15 +197,12 @@ const Table = styled.table`
     }
     tbody > tr {
       width: 33%;
-      //min-width: 250px;
       display: flex;
       flex-direction: column;
-      //box-shadow: 0px -5px 5px rgba(201, 216, 197, 0.8);
-      //border-bottom: 2px solid red;
-
       margin: 0.5em;
     }
   }
+
   @media screen and (max-width: 800px) {
     tbody > tr {
       width: 50%;
@@ -253,11 +221,9 @@ const CustomTr = styled.tr`
   display: grid;
   grid-template-columns: ${(props) => `repeat(${props.numberCol}, 1fr)`};
   border-radius: 5px;
-
   & td {
     padding: 0.5em 1em 0.5em;
   }
-
   &.fullwidth {
     grid-template-columns: 1fr;
   }

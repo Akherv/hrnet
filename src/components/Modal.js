@@ -9,7 +9,7 @@ export const Modal = ({ toggleOpen, setToggleOpen }) => {
     navigate("/allemployee");
     setToggleOpen(false);
   };
-  console.log(toggleOpen);
+
   return (
     <ModalContainer
       className={toggleOpen ? "showModal" : "hideModal"}
@@ -24,13 +24,6 @@ export const Modal = ({ toggleOpen, setToggleOpen }) => {
 };
 
 const ModalContainer = styled.div`
-  /* .hideModal {
-    display: none !important;
-    width: 0;
-    height: 0;
-    background-color: rgba(0, 0, 0, 0.3);
-    position: inherit;
-  }*/
   &.showModal {
     display: block !important;
     width: 100%;
@@ -45,7 +38,7 @@ const ModalContainer = styled.div`
 const ModalContent = styled.div`
   width: 50%;
   height: 50%;
-  background-color: white;
+  background-color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -54,7 +47,6 @@ const ModalContent = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
   & button {
     display: block;
     width: 300px;
@@ -66,6 +58,6 @@ const ModalContent = styled.div`
     border-radius: 5px;
     cursor: pointer;
     background-color: #1d3354;
-    color: white;
+    color: #fff;
   }
 `;

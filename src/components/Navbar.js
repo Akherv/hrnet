@@ -1,10 +1,12 @@
-import styled from "styled-components";
-import { Tab } from "./Tab";
-import logo from "../assets/HRNet-.png";
 import { useState } from "react";
+import styled from "styled-components";
+
+import logo from "../assets/HRNet.png";
+import { Tab } from "./Tab";
 
 export const NavBar = () => {
   const [toggleOpen, setToggleOpen] = useState(false);
+
   return (
     <>
       <NavMobil onClick={() => setToggleOpen(true)}>☰</NavMobil>
@@ -31,11 +33,12 @@ export const NavBar = () => {
 
 const NavMobil = styled.div`
   display: none;
+
   @media screen and (max-width: 1320px) {
-    font-size: 3rem;
-    margin: 0.5em;
     display: block;
     position: absolute;
+    font-size: 3rem;
+    margin: 0.5em;
   }
 `;
 
@@ -52,7 +55,7 @@ const Nav = styled.nav`
       left: 0;
       height: 100vh;
       z-index: 5;
-      border-right: 1px solid white;
+      border-right: 1px solid #fff;
     }
     &.hide {
       display: none;
@@ -67,9 +70,8 @@ const NavLogo = styled.div`
   font-weight: bold;
   color: #1d3354;
   max-width: 100%;
-
   & span {
-    color: white;
+    color: #fff;
     margin-left: 10px;
     font-size: 2rem;
   }

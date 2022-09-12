@@ -1,4 +1,5 @@
 import styled from "styled-components";
+
 import { CustomTableFilter } from "../features/CustomTableFilter";
 import { CustomTableSearch } from "../features/CustomTableSearch";
 
@@ -14,6 +15,7 @@ export const CustomTableHeader = ({ onFilter, onSearch }) => {
 const TableHeader = styled.div`
   display: flex;
   justify-content: space-between;
+
   @media screen and (max-width: 1320px) {
     flex-wrap: wrap;
     justify-content: center;

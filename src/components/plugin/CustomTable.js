@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+
 import { filterRows, sortRows, paginateRows } from "./utils/Utils";
 import { CustomTableHeader } from "./components/CustomTableHeader";
 import { CustomTableBody } from "./components/CustomTableBody";
@@ -115,19 +116,14 @@ const ContainerTable = styled.section`
 const Wrapper = styled.div`
   max-width: calc(100vw - 250px);
   overflow-x: scroll;
-  /* ::-webkit-scrollbar {
-    display: none;
-  } */
-  /* -ms-overflow-style: none;
-  scrollbar-width: none; */
   scrollbar-color: #f5f5f5 #c9d8c5;
   ::-webkit-scrollbar {
     cursor: pointer;
   }
+
   @media screen and (max-width: 1320px) {
     max-width: unset;
     order: 1;
-
     background-color: #1d3354;
   }
 `;

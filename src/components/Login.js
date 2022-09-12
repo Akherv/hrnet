@@ -37,7 +37,7 @@ export const Login = (props) => {
 
 const LoginContainer = styled.div`
   box-sizing: border-box;
-  background-color: white;
+  background-color: #fff;
   width: 300px;
   margin: 0 auto;
   padding: 2rem;
@@ -52,7 +52,6 @@ const InputWrapper = styled.div`
   flex-direction: column;
   text-align: left;
   margin-bottom: 1rem;
-
   & label {
     font-weight: bold;
   }
@@ -69,7 +68,6 @@ const InputRemember = styled.div`
   & label {
     margin-left: 0.25rem;
   }
-
   & input {
     padding: 5px;
     font-size: 1.2rem;

@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const SubmitButton = ({ allIsValid }) => {
-  //console.log(allIsValid);
   return <ButtonContainer active={allIsValid}>Save</ButtonContainer>;
 };
 export default SubmitButton;

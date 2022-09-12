@@ -1,5 +1,5 @@
-import styled from "styled-components";
 import { useEffect, useMemo, useState } from "react";
+import styled from "styled-components";
 
 export const CustomTablePagination = ({
   currentPage,
@@ -28,9 +28,8 @@ export const CustomTablePagination = ({
     setPaginationFitered(arr);
   }, [pagination, currentPage]);
 
-  const handleSubmitPage = () => {
-    //e.preventDefault();
-    console.log(page);
+  const handleSubmitPage = (e) => {
+    e.preventDefault();
     setCurrentPage(page);
   };
   return (
@@ -51,17 +50,6 @@ export const CustomTablePagination = ({
         </button>
       </div>
 
-      {/* <ul>
-        {paginationFiltered.map((page, idx) => {
-          return (
-            <Pages key={idx} onClick={(e) => setCurrentPage(page)}>
-              <span className={page === currentPage ? "activePage" : ""}>
-                {page}
-              </span>
-            </Pages>
-          );
-        })}
-      </ul> */}
       <div className="pageInfoContainer">
         <span style={{ fontWeight: "600" }}>{`page n°${
           totalPages > 0 ? currentPage : 0
@@ -106,13 +94,11 @@ const Pagination = styled.div`
   & span {
     margin: 0 0.2em;
   }
-
   & button:not(.shorthand) {
     border: none;
     background: none;
     cursor: pointer;
   }
-
   & .pageInfoContainer {
     display: flex;
     flex-direction: row;
@@ -122,6 +108,7 @@ const Pagination = styled.div`
     width: 60px;
     margin: 0 0.2em;
   }
+
   @media screen and (max-width: 1320px) {
     width: 80%;
     margin: auto;
@@ -129,27 +116,12 @@ const Pagination = styled.div`
     flex-wrap: wrap;
     background-color: #b8cab3;
     border-radius: 5px;
-
     & div {
       margin: 1em;
     }
   }
+
   @media screen and (max-width: 800px) {
     flex-direction: column;
   }
 `;
-
-// const Pages = styled.li`
-//   display: flex;
-//   margin: 0 0.5em;
-//   cursor: pointer;
-
-//   & span {
-//     margin: 0 0.2em;
-//     font-weight: 600;
-//   }
-
-//   & .activePage {
-//     color: tomato;
-//   }
-// `;

@@ -38,11 +38,11 @@ const TabElement = styled.li`
 
 const Icon = styled.i`
   margin-right: 10px;
-  color: white;
+  color: #fff;
   font-size: 20px;
   width: 40px;
 `;
 
 const TabText = styled.span`
-  color: white;
+  color: #fff;
 `;

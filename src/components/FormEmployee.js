@@ -1,14 +1,17 @@
+import { useState } from "react";
 import styled from "styled-components";
+
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import "dayjs/locale/fr";
+import moment from "moment";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import TextField from "@mui/material/TextField";
-//import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+
 import SubmitButton from "./SubmitButton";
-import { useState } from "react";
 
 export const FormEmployee = ({
   handleSubmit,
@@ -19,13 +22,13 @@ export const FormEmployee = ({
   allFieldsAreValid,
   setAllFieldsAreValid,
 }) => {
-  const normalizeDate = (date) => {
-    //const dateArr = date.toISOString().slice(0, 10).split("-");
-    const dateArr = date.target.value.split("-");
-    const newDateArr = [dateArr[2], dateArr[1], dateArr[0]];
-    const newDateString = newDateArr.join("/");
-    return newDateString;
-  };
+  // const normalizeDate = (date) => {
+  //   //const dateArr = date.toISOString().slice(0, 10).split("-");
+  //   const dateArr = date.target.value.split("-");
+  //   const newDateArr = [dateArr[2], dateArr[1], dateArr[0]];
+  //   const newDateString = newDateArr.join("/");
+  //   return newDateString;
+  // };
 
   const [errors, setErrors] = useState({});
 
@@ -33,7 +36,6 @@ export const FormEmployee = ({
     console.log(e);
     const field = type ? type : e.target.name;
     const value = type ? e : e.target.value;
-    //console.log(e.length);
     let res = {};
     switch (field) {
       case "firstname":
@@ -80,7 +82,6 @@ export const FormEmployee = ({
 
   const handleChange = (e, type) => {
     const isValid = validateField(e, type);
-    //console.log(e, type);
     if (!isValid.test) {
       setErrors({
         ...errors,
@@ -98,15 +99,21 @@ export const FormEmployee = ({
         [type ? `${type}IsValid` : `${e.target.name}IsValid`]: true,
       });
     }
-    console.log(type, e);
-
     setEmployee({
       ...employee,
       [type ? type : e.target.name]: type ? e : e.target.value,
     });
   };
 
-  //console.log(errors);
+  const modifiedValueBirthdate = moment(
+    moment(employee.birthdate, "DD-MM-YYYY"),
+    "MM-DD-YYYY"
+  );
+  const modifiedValueStartDate = moment(
+    moment(employee.startdate, "DD-MM-YYYY"),
+    "MM-DD-YYYY"
+  );
+
   return (
     <form onSubmit={handleSubmit}>
       <FieldsetContainer>
@@ -149,70 +156,38 @@ export const FormEmployee = ({
         </InputContainer>
         <InputContainer>
           <label htmlFor="birthdate">Birth date</label>
-          <LocalizationProvider dateAdapter={AdapterMoment}>
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={"fr"}>
             <DatePicker
-              name="birthdate"
-              inputFormat="DD/MM/YYYY"
-              DateTimeFormat={Intl.DateTimeFormat}
-              locale="fr"
-              value={employee.birthdate}
+              value={modifiedValueBirthdate}
               onChange={(newValue) => {
-                //(e) => handleChange(normalizeDate(e), "birthdate")
-                setEmployee({
-                  ...employee,
-                  birthdate: newValue.$d,
-                });
+                handleChange(newValue.format("DD-MM-YYYY"), "birthdate");
               }}
               renderInput={(params) => <TextField {...params} />}
             />
           </LocalizationProvider>
-          {/* <input
-            type="date"
-            id="birthdate"
-            name="birthdate"
-            value={employee.birthdate}
-            onChange={(e) => handleChange(e)}
-            required
-          /> */}
-          {/* {errors.birthdate && (
+          {errors.birthdate && (
             <p style={{ position: "absolute", bottom: "-40px" }}>
               {errors.birthdate}
             </p>
-          )} */}
+          )}
         </InputContainer>
         <InputContainer>
           <label htmlFor="startdate">Start date</label>
-          {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={"fr"}>
             <DatePicker
               name="startdate"
-              inputFormat="DD/MM/YYYY"
-              value={employee.startdate}
-              DateTimeFormat={Intl.DateTimeFormat}
-              locale="fr"
-              //onChange={(e) => handleChange(e, "startdate")}
+              value={modifiedValueStartDate}
               onChange={(newValue) => {
-                setEmployee({
-                  ...employee,
-                  //startdate: normalizeDate(newValue.$d),
-                  startdate: newValue.$d,
-                });
+                handleChange(newValue.format("DD-MM-YYYY"), "startdate");
               }}
               renderInput={(params) => <TextField {...params} />}
             />
-          </LocalizationProvider> */}
-          <input
-            type="date"
-            id="stardate"
-            name="startdate"
-            value={employee.startdate}
-            onChange={(e) => handleChange(e)}
-            required
-          />
-          {/* {errors.startdate && (
+          </LocalizationProvider>
+          {errors.startdate && (
             <p style={{ position: "absolute", bottom: "-40px" }}>
               {errors.startdate}
             </p>
-          )} */}
+          )}
         </InputContainer>
       </FieldsetContainer>
       <FieldsetContainer>
@@ -225,10 +200,7 @@ export const FormEmployee = ({
             name="street"
             placeholder="1 street of fantasy"
             value={employee.street}
-            onChange={
-              (e) => handleChange(e)
-              //setEmployee({ ...employee, street: e.target.value })
-            }
+            onChange={(e) => handleChange(e)}
             required
           />
           {errors.street && (
@@ -245,10 +217,7 @@ export const FormEmployee = ({
             name="city"
             placeholder="Paris, Rennes ..."
             value={employee.city}
-            onChange={
-              (e) => handleChange(e)
-              //setEmployee({ ...employee, city: e.target.value })
-            }
+            onChange={(e) => handleChange(e)}
             required
           />
           {errors.city && (
@@ -265,10 +234,7 @@ export const FormEmployee = ({
             name="state"
             placeholder="France, Canada..."
             value={employee.state}
-            onChange={
-              (e) => handleChange(e)
-              //setEmployee({ ...employee, state: e.target.value })
-            }
+            onChange={(e) => handleChange(e)}
             required
           />
           {errors.state && (
@@ -285,10 +251,7 @@ export const FormEmployee = ({
             name="zipcode"
             placeholder="72000, 35000..."
             value={employee.zipcode}
-            onChange={
-              (e) => handleChange(e)
-              //setEmployee({ ...employee, zipcode: e.target.value })
-            }
+            onChange={(e) => handleChange(e)}
             min="0"
             maxLength="5"
             required
@@ -310,10 +273,7 @@ export const FormEmployee = ({
             name="department"
             value={employee.department}
             label="Age"
-            onChange={
-              (e) => handleChange(e)
-              //setEmployee({ ...employee, department: e.target.value })
-            }
+            onChange={(e) => handleChange(e)}
           >
             <MenuItem value=""></MenuItem>
             <MenuItem value="Sales">Sales</MenuItem>
@@ -365,12 +325,10 @@ const FieldsetContainer = styled.fieldset`
     & .MuiList-root {
       background-color: blue;
     }
-
     & label#department {
       color: white;
       background-color: #1d3354;
     }
-
     & fieldset {
       display: none;
     }
@@ -385,7 +343,6 @@ const InputContainer = styled.div`
   text-align: left;
   margin-bottom: 30px;
   position: relative;
-
   & label {
     margin: 10px 0;
   }
