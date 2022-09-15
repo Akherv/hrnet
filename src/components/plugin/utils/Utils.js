@@ -27,14 +27,12 @@ export const filterRows = (rows, searchWord) => {
   if (searchWord.length === 0) return rows;
 
   return rows.filter((row) => {
-    let arrVal = [];
     for (const [, val] of Object.entries(row)) {
       if (normalizeSearch(val).toString().includes(searchWord)) {
-        arrVal.push(val);
         return row;
       }
     }
-    //return arrVal;
+    return false;
   });
 };
 

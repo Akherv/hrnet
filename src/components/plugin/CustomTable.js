@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from "react";
-import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 import { filterRows, sortRows, paginateRows } from "./utils/Utils";
@@ -7,36 +6,26 @@ import { CustomTableHeader } from "./components/CustomTableHeader";
 import { CustomTableBody } from "./components/CustomTableBody";
 import { CustomTableFooter } from "./components/CustomTableFooter";
 
-export const CustomTable = () => {
-  //fetch the datas from the store
-  const employees = useSelector((state) => state.employee.arr);
-
-  //Define the table h1
-  const tableTitle = "All Employees";
-
-  //Define the columns title & type
-  const columns = [
-    { title: "Firstname", type: "firstname" },
-    { title: "Lastname", type: "lastname" },
-    { title: "Start Date", type: "startdate" },
-    { title: "Department", type: "department" },
-    { title: "Birth Date", type: "birthdate" },
-    { title: "Street", type: "street" },
-    { title: "City", type: "city" },
-    { title: "State", type: "state" },
-    { title: "Zip Code", type: "zipcode" },
-  ];
+export const CustomTable = ({
+  datas,
+  tableTitle,
+  columns,
+  sortDefault,
+  entriesArr,
+  entriesDefaultLimit,
+  customColors,
+}) => {
   const [rows, setRows] = useState([]);
 
   //Fill the rows local state with the datas fetched from the store
   useEffect(() => {
-    setRows(employees);
-  }, [employees]);
+    setRows(datas);
+  }, [datas]);
 
   //Initialize the other local states needed for dropdown/searchbar/sorting/pagination
-  const [maxRows, setMaxRows] = useState(10);
+  const [maxRows, setMaxRows] = useState(entriesDefaultLimit);
   const [searchWord, setSearchWord] = useState([]);
-  const [sort, setSort] = useState({ order: "up", type: "lastname" });
+  const [sort, setSort] = useState({ order: "up", type: sortDefault });
   const [currentPage, setCurrentPage] = useState(1);
 
   const filteredRows = useMemo(
@@ -77,11 +66,17 @@ export const CustomTable = () => {
   };
 
   return (
-    <ContainerTable>
+    <ContainerTable customColors={customColors}>
       <h1>{tableTitle}</h1>
-      <CustomTableHeader onFilter={handleFilter} onSearch={handleSearch} />
-      <Wrapper>
+      <CustomTableHeader
+        onFilter={handleFilter}
+        onSearch={handleSearch}
+        entriesArr={entriesArr}
+        entriesDefaultLimit={entriesDefaultLimit}
+      />
+      <Wrapper customColors={customColors}>
         <CustomTableBody
+          customColors={customColors}
           columns={columns}
           onSort={handleSortColumn}
           sort={sort}
@@ -90,6 +85,7 @@ export const CustomTable = () => {
         />
       </Wrapper>
       <CustomTableFooter
+        customColors={customColors}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         maxRows={maxRows}
@@ -104,6 +100,14 @@ const ContainerTable = styled.section`
   display: flex;
   flex-direction: column;
   padding: 0 2em;
+  background-color: ${(props) => `${props.customColors.bg_1}`};
+  font-size: 14px;
+  font-family: Roboto, sans-serif;
+  color: ${(props) => `${props.customColors.fontColor}`};
+  h1 {
+    margin-top: 40px;
+    font-size: 2rem;
+  }
 
   @media screen and (max-width: 1320px) {
     padding: 0;
@@ -114,9 +118,9 @@ const ContainerTable = styled.section`
 `;
 
 const Wrapper = styled.div`
-  max-width: calc(100vw - 250px);
+  max-width: 100vw;
   overflow-x: scroll;
-  scrollbar-color: #f5f5f5 #c9d8c5;
+  scrollbar-color: ${(props) => `#f5f5f5 ${props.customColors.bg_1}`};
   ::-webkit-scrollbar {
     cursor: pointer;
   }

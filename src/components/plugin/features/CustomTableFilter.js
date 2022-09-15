@@ -1,13 +1,25 @@
+import { useState, useRef } from "react";
 import styled from "styled-components";
 
-export const CustomTableFilter = ({ onFilter }) => {
-  const options = [10, 25, 50, 100];
-
+export const CustomTableFilter = ({
+  onFilter,
+  entriesArr,
+  entriesDefaultLimit,
+}) => {
+  const [selectedEntrie, setSelectedEntrie] = useState(entriesDefaultLimit);
+  const selectRef = useRef();
   return (
     <TableFilter>
       <span>Show</span>
-      <select onChange={(e) => onFilter(e)}>
-        {options.map((option, idx) => (
+      <select
+        onChange={(e) => {
+          onFilter(e);
+          setSelectedEntrie(selectRef.current?.value);
+        }}
+        ref={selectRef}
+        value={selectedEntrie}
+      >
+        {entriesArr.map((option, idx) => (
           <option key={idx}>{option}</option>
         ))}
       </select>

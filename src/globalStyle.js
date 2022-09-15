@@ -32,7 +32,4 @@ export const GlobalStyle = createGlobalStyle`
   a{
     text-decoration: none;
   }
-  .boldStyle{
-    font-weight: 600;
-  }
 `;

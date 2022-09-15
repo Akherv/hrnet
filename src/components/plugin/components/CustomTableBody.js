@@ -5,6 +5,7 @@ import { normalizeSearch } from "../utils/Utils";
 import { CustomTableSort } from "../features/CustomTableSort";
 
 export const CustomTableBody = ({
+  customColors,
   columns,
   onSort,
   sort,
@@ -14,7 +15,7 @@ export const CustomTableBody = ({
   const [toggleOpen, setToggleOpen] = useState(false);
 
   return (
-    <Table>
+    <Table customColors={customColors}>
       <thead>
         <CustomTr
           className="sortTitle"
@@ -63,7 +64,7 @@ export const CustomTableBody = ({
                       style={{
                         backgroundColor:
                           column.type === sort.type
-                            ? "rgba(255, 255, 255, 0.5)"
+                            ? `${customColors.bg_4}`
                             : "",
                       }}
                       title={row[column.type]}
@@ -94,8 +95,8 @@ const Table = styled.table`
   & thead {
     display: block;
     border-bottom: 1px solid grey;
-    background-color: #1d3354;
-    color: #fff;
+    background-color: ${(props) => `${props.customColors.bg_2}`};
+    color: ${(props) => `${props.customColors.fontColorLabel}`};
     & tr {
       padding: 0;
     }
@@ -121,10 +122,10 @@ const Table = styled.table`
   & tbody {
     height: 100%;
     & tr:nth-of-type(1n) {
-      background-color: #c9d8c5;
+      background-color: ${(props) => `${props.customColors.bg_1}`};
     }
     & tr:nth-of-type(2n) {
-      background-color: whitesmoke;
+      background-color: ${(props) => `${props.customColors.bg_3}`};
     }
     & td {
       display: -webkit-box;
@@ -142,6 +143,9 @@ const Table = styled.table`
         font-weight: 600;
         margin: 0 0.2em;
       }
+    }
+    .boldStyle {
+      font-weight: 600;
     }
   }
 
@@ -184,10 +188,10 @@ const Table = styled.table`
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      background-color: #1d3354;
+      background-color: ${(props) => `${props.customColors.bg_2}`};
       padding: 1em;
       & tr:nth-of-type(2n) {
-        background-color: #c9d8c5;
+        background-color: ${(props) => `${props.customColors.bg_1}`};
       }
       & td {
         & span {

@@ -3,10 +3,19 @@ import styled from "styled-components";
 import { CustomTableFilter } from "../features/CustomTableFilter";
 import { CustomTableSearch } from "../features/CustomTableSearch";
 
-export const CustomTableHeader = ({ onFilter, onSearch }) => {
+export const CustomTableHeader = ({
+  onFilter,
+  onSearch,
+  entriesArr,
+  entriesDefaultLimit,
+}) => {
   return (
     <TableHeader>
-      <CustomTableFilter onFilter={onFilter} />
+      <CustomTableFilter
+        onFilter={onFilter}
+        entriesArr={entriesArr}
+        entriesDefaultLimit={entriesDefaultLimit}
+      />
       <CustomTableSearch onSearch={onSearch} />
     </TableHeader>
   );

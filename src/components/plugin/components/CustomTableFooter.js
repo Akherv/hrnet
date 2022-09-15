@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { CustomTablePagination } from "../features/CustomTablePagination";
 
 export const CustomTableFooter = ({
+  customColors,
   currentPage,
   setCurrentPage,
   maxRows,
@@ -30,6 +31,7 @@ export const CustomTableFooter = ({
         entries
       </InfoPagination>
       <CustomTablePagination
+        customColors
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         totalPages={totalPages}

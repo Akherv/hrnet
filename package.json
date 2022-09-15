@@ -1,6 +1,6 @@
 {
   "name": "hrnet",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.0",
@@ -8,6 +8,7 @@
     "@mui/material": "^5.10.2",
     "@mui/x-date-pickers": "^5.0.1",
     "@reduxjs/toolkit": "^1.8.5",
+    "@smerinthee/custom-table": "^0.1.3",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
@@ -24,7 +25,6 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

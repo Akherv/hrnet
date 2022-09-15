@@ -4,6 +4,8 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import { NavBar } from "./components/Navbar";
@@ -12,7 +14,22 @@ import { NewEmployee } from "./pages/NewEmployee";
 import { AllEmployee } from "./pages/AllEmployee";
 import { Error } from "./pages/Error";
 
+import { loadEmployee } from "./slices/employeeSlice";
+
 export const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        dispatch(loadEmployee());
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [dispatch]);
+
   return (
     <AppContainer>
       <Router>

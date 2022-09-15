@@ -1,57 +1,39 @@
-import { useEffect, useMemo, useState } from "react";
-import styled from "styled-components";
+import { useState } from "react";
+import styled, { css } from "styled-components";
 
 export const CustomTablePagination = ({
+  customColors,
   currentPage,
   setCurrentPage,
   totalPages,
 }) => {
-  const [pagination, setPagination] = useState([]);
-  const [paginationFiltered, setPaginationFitered] = useState([]);
   const [page, setPage] = useState();
-
-  useEffect(() => {
-    const arr = [];
-    for (let i = 0; i < totalPages; i++) {
-      arr.push(i + 1);
-    }
-    setPagination(arr);
-  }, [totalPages]);
-
-  const filterPagination = useMemo(() => {
-    let arr = [];
-    [...pagination].map((page, idx) => {
-      return page >= currentPage - 3 && page <= currentPage + 3
-        ? arr.push(page)
-        : null;
-    });
-    setPaginationFitered(arr);
-  }, [pagination, currentPage]);
 
   const handleSubmitPage = (e) => {
     e.preventDefault();
     setCurrentPage(page);
   };
   return (
-    <Pagination>
-      <div>
-        <button
-          className="shorthand"
+    <Pagination customColors>
+      <LeftSide>
+        <Button
+          shortcut
           onClick={() => setCurrentPage(1)}
           disabled={currentPage <= 1}
         >
           <span>Start</span>
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => setCurrentPage(currentPage - 1)}
           disabled={currentPage <= 1}
         >
-          ◄<span>Previous</span>
-        </button>
-      </div>
+          <span>◄</span>
+          <span>Previous</span>
+        </Button>
+      </LeftSide>
 
-      <div className="pageInfoContainer">
-        <span style={{ fontWeight: "600" }}>{`page n°${
+      <PageInfo>
+        <span>{`page n°${
           totalPages > 0 ? currentPage : 0
         } / ${totalPages}`}</span>
         <form onSubmit={handleSubmitPage}>
@@ -62,23 +44,23 @@ export const CustomTablePagination = ({
             onChange={(e) => setPage(e.target.value)}
           />
         </form>
-      </div>
+      </PageInfo>
 
-      <div>
-        <button
+      <RightSide>
+        <Button
           onClick={(e) => setCurrentPage(currentPage + 1)}
           disabled={currentPage === totalPages || totalPages === 0}
         >
-          <span>Next</span>►
-        </button>
-        <button
-          className="shorthand"
+          <span>Next</span> <span>►</span>
+        </Button>
+        <Button
+          shortcut
           onClick={() => setCurrentPage(totalPages)}
           disabled={currentPage === totalPages || totalPages === 0}
         >
           <span>End</span>
-        </button>
-      </div>
+        </Button>
+      </RightSide>
     </Pagination>
   );
 };
@@ -87,22 +69,9 @@ const Pagination = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  & ul {
-    margin: 1em;
-    display: flex;
-  }
   & span {
     margin: 0 0.2em;
-  }
-  & button:not(.shorthand) {
-    border: none;
-    background: none;
-    cursor: pointer;
-  }
-  & .pageInfoContainer {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    font-weight: 600;
   }
   & form input {
     width: 60px;
@@ -114,7 +83,7 @@ const Pagination = styled.div`
     margin: auto;
     justify-content: center;
     flex-wrap: wrap;
-    background-color: #b8cab3;
+    background-color: ${(props) => `${props.customColors}`};
     border-radius: 5px;
     & div {
       margin: 1em;
@@ -125,3 +94,27 @@ const Pagination = styled.div`
     flex-direction: column;
   }
 `;
+
+const Button = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  ${(props) =>
+    props.shortcut &&
+    css`
+      border: 1px solid grey;
+      border-radius: 2px;
+    `}
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+const LeftSide = styled(Container)``;
+const PageInfo = styled(Container)``;
+const RightSide = styled(Container)``;
