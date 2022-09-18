@@ -1,3 +1,4 @@
+![Cover](https://github.com/Akherv/hrnet/blob/99c1097e7eae337e746ff19a404f995f3dca1a2f/public/logo192.png)
 # Project #14 - HRNET (front-end)
 
 This codebase contains the code needed to run the frontend for Hrnet.
