@@ -2,6 +2,10 @@ import { useState } from "react";
 import styled from "styled-components";
 
 import logo from "../assets/HRNet.png";
+import home from "../assets/home.svg";
+import user from "../assets/user.svg";
+import group from "../assets/group.svg";
+
 import { Tab } from "./Tab";
 
 export const NavBar = () => {
@@ -16,13 +20,13 @@ export const NavBar = () => {
           <span>HRNet</span>
         </NavLogo>
         <TabsContainer>
-          <Tab tabIcon="fa-home" tabLink="/">
+          <Tab tabIcon={home} tabIconName="home" tabLink="/">
             Home
           </Tab>
-          <Tab tabIcon="fa-user" tabLink="newemployee">
+          <Tab tabIcon={user} tabIconName="user" tabLink="newemployee">
             New employee
           </Tab>
-          <Tab tabIcon="fa-group" tabLink="allemployee">
+          <Tab tabIcon={group} tabIconName="group" tabLink="allemployee">
             All employee
           </Tab>
         </TabsContainer>

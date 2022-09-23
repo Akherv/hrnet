@@ -5,7 +5,7 @@ export const Tab = (props) => {
   return (
     <TabElement>
       <TabLink to={props.tabLink}>
-        <Icon className={`fa ${props.tabIcon}`}></Icon>
+        <Icon src={props.tabIcon} alt={props.tabIconName} />
         <TabText>{props.children}</TabText>
       </TabLink>
     </TabElement>
@@ -24,8 +24,7 @@ const TabLink = styled(StyledLink)`
   text-decoration: none;
   margin-right: 0.5rem;
   display: flex;
-  align-items: center;
-  &:hover > i,
+  align-items: baseline;
   &:hover > span {
     color: #f39237;
   }
@@ -36,11 +35,10 @@ const TabElement = styled.li`
   text-align: center;
 `;
 
-const Icon = styled.i`
+const Icon = styled.img`
+  width: 15px;
   margin-right: 10px;
   color: #fff;
-  font-size: 20px;
-  width: 40px;
 `;
 
 const TabText = styled.span`

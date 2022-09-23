@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import userCircle from "../assets/user-circle.svg";
+
 export const Login = (props) => {
   let navigate = useNavigate();
   const valid = true; // TODO v2: authentification
@@ -14,7 +16,7 @@ export const Login = (props) => {
 
   return (
     <LoginContainer>
-      <i className="fa fa-user-circle sign-in-icon"></i>
+      <img src={userCircle} alt="user" />
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <InputWrapper>
@@ -45,6 +47,10 @@ const LoginContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  & img {
+    width: 20px;
+  }
 `;
 
 const InputWrapper = styled.div`
