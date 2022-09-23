@@ -32,4 +32,9 @@ export const GlobalStyle = createGlobalStyle`
   a{
     text-decoration: none;
   }
+
+  .css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root.Mui-selected:hover,
+  .css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root.Mui-selected {
+    background-color: unset !important;
+  }
 `;

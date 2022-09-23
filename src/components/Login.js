@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export const Login = (props) => {
   let navigate = useNavigate();
-  const valid = true;
+  const valid = true; // TODO v2: authentification
 
   const handleSubmit = (e) => {
     e.preventDefault();

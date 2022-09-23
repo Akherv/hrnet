@@ -2,7 +2,6 @@ import { useState } from "react";
 import styled from "styled-components";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-// import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/fr";
 import moment from "moment";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -23,18 +22,9 @@ export const FormEmployee = ({
   allFieldsAreValid,
   setAllFieldsAreValid,
 }) => {
-  // const normalizeDate = (date) => {
-  //   //const dateArr = date.toISOString().slice(0, 10).split("-");
-  //   const dateArr = date.target.value.split("-");
-  //   const newDateArr = [dateArr[2], dateArr[1], dateArr[0]];
-  //   const newDateString = newDateArr.join("/");
-  //   return newDateString;
-  // };
-
   const [errors, setErrors] = useState({});
 
   const validateField = (e, type) => {
-    console.log(e);
     const field = type ? type : e.target.name;
     const value = type ? e : e.target.value;
     let res = {};
@@ -68,7 +58,8 @@ export const FormEmployee = ({
         res.error = "Please enter a state";
         break;
       case "zipcode":
-        res.test = value.length >= 5;
+        const regex = /^[0-9]*$/;
+        res.test = value.length >= 5 && value.match(regex);
         res.error = "Please enter 5 numbers";
         break;
       case "department":
@@ -107,11 +98,11 @@ export const FormEmployee = ({
   };
 
   const modifiedValueBirthdate = moment(
-    moment(employee.birthdate, "DD-MM-YYYY"),
+    moment(employee.birthdate, "DD/MM/YYYY"),
     "MM-DD-YYYY"
   );
   const modifiedValueStartDate = moment(
-    moment(employee.startdate, "DD-MM-YYYY"),
+    moment(employee.startdate, "DD/MM/YYYY"),
     "MM-DD-YYYY"
   );
 
@@ -130,6 +121,7 @@ export const FormEmployee = ({
             onChange={(e) => handleChange(e)}
             required
             minLength="2"
+            error={errors.firstname || ""}
           />
           {errors.firstname && (
             <p style={{ position: "absolute", bottom: "-40px" }}>
@@ -148,6 +140,7 @@ export const FormEmployee = ({
             onChange={(e) => handleChange(e)}
             required
             minLength="2"
+            error={errors.lastname || ""}
           />
           {errors.lastname && (
             <p style={{ position: "absolute", bottom: "-40px" }}>
@@ -159,11 +152,14 @@ export const FormEmployee = ({
           <label htmlFor="birthdate">Birth date</label>
           <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={"fr"}>
             <DatePicker
-              value={modifiedValueBirthdate}
+              name="birthdate"
+              value={(employee.birthdate && modifiedValueBirthdate) || null}
               onChange={(newValue) => {
-                handleChange(newValue.format("DD-MM-YYYY"), "birthdate");
+                newValue &&
+                  handleChange(newValue.format("DD/MM/YYYY"), "birthdate");
               }}
               renderInput={(params) => <TextField {...params} />}
+              error={errors.birthdate || ""}
             />
           </LocalizationProvider>
           {errors.birthdate && (
@@ -177,11 +173,13 @@ export const FormEmployee = ({
           <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={"fr"}>
             <DatePicker
               name="startdate"
-              value={modifiedValueStartDate}
+              value={(employee.startdate && modifiedValueStartDate) || null}
               onChange={(newValue) => {
-                handleChange(newValue.format("DD-MM-YYYY"), "startdate");
+                newValue &&
+                  handleChange(newValue.format("DD/MM/YYYY"), "startdate");
               }}
               renderInput={(params) => <TextField {...params} />}
+              error={errors.startdate || ""}
             />
           </LocalizationProvider>
           {errors.startdate && (
@@ -199,10 +197,11 @@ export const FormEmployee = ({
             type="text"
             id="street"
             name="street"
-            placeholder="1 street of fantasy"
+            placeholder="1 street of imagination"
             value={employee.street}
             onChange={(e) => handleChange(e)}
             required
+            error={errors.street || ""}
           />
           {errors.street && (
             <p style={{ position: "absolute", bottom: "-40px" }}>
@@ -220,6 +219,7 @@ export const FormEmployee = ({
             value={employee.city}
             onChange={(e) => handleChange(e)}
             required
+            error={errors.city || ""}
           />
           {errors.city && (
             <p style={{ position: "absolute", bottom: "-40px" }}>
@@ -237,6 +237,7 @@ export const FormEmployee = ({
             value={employee.state}
             onChange={(e) => handleChange(e)}
             required
+            error={errors.state || ""}
           />
           {errors.state && (
             <p style={{ position: "absolute", bottom: "-40px" }}>
@@ -256,6 +257,7 @@ export const FormEmployee = ({
             min="0"
             maxLength="5"
             required
+            error={errors.zipcode || ""}
           />
           {errors.zipcode && (
             <p style={{ position: "absolute", bottom: "-40px" }}>
@@ -285,7 +287,7 @@ export const FormEmployee = ({
           </Select>
           {errors.department && (
             <p style={{ position: "absolute", bottom: "-40px" }}>
-              {errors.department}
+              {errors.department || ""}
             </p>
           )}
         </InputContainer>
@@ -352,5 +354,17 @@ const InputContainer = styled.div`
     padding: 0.5em;
     border: none;
     border-radius: 5px;
+  }
+
+  & input:not(.MuiInputBase-input) {
+    border: ${(props) =>
+      props.children[1].props.error !== "" ? "1px solid red" : ""};
+  }
+
+  & input.MuiInputBase-root {
+    border: ${(props) =>
+      props.children[1].props.children?.props?.error !== ""
+        ? "1px solid red"
+        : ""};
   }
 `;
