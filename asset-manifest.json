@@ -1,0 +1,11 @@
+{
+  "files": {
+    "main.js": "/hrnet/static/js/main.82416b5b.js",
+    "static/media/HRNet.png": "/hrnet/static/media/HRNet.fccadda60aa3cd088f70.png",
+    "index.html": "/hrnet/index.html",
+    "main.82416b5b.js.map": "/hrnet/static/js/main.82416b5b.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.82416b5b.js"
+  ]
+}
